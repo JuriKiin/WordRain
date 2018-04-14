@@ -1,6 +1,13 @@
-var r = document.getElementById('result');
+// import {createWord} from './classes.js'
 
-var speech;
+let r = document.getElementById('result');
+
+let speech;
+const canvas = document.querySelector("canvas"); 
+const ctx = canvas.getContext("2d");
+
+let words = []
+window.onload = update;
 
 function startConverting(){
     if('webkitSpeechRecognition' in window){
@@ -20,6 +27,9 @@ function startConverting(){
                     finalWords += transcript;
                 } else {
                     interimTranscript += transcript;
+                    createWord(transcript);
+                    // let word = createWord();
+                    // words.push(word);
                 }
             }
             r.innerHTML = finalWords +  '<span style="color:#999">' + interimTranscript + '</span>';
@@ -32,4 +42,32 @@ function startConverting(){
     }
 }
 
+function update(){
+    requestAnimationFrame(update);
+    for(let i = 0; i < words.length; i++){
+        words[i].move();
+        words[i].draw(ctx);
+    }
+}
+
+function createWord(word, color, font){
+    let wordObj = {
+        word: word,
+        speed: word.length / 10,
+        x: 50,
+        y: 0,
+        color: color,
+        font: font,
+        move: function(){
+            this.y += this.speed;
+        },
+        draw: function (ctx){
+            ctx.font = "30px Comic Sans MS";
+            ctx.fillStyle = "red";
+            ctx.textAlign = "center";
+            ctx.fillText(this.word, this.x, this.y);
+        }
+    }
+    words.push(wordObj);
+}
 

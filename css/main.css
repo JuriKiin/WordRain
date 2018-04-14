@@ -3,3 +3,6 @@
     margin: 0 20%;
     background-color: azure;
 }
+#canvas{
+    position: absolute;
+} 
