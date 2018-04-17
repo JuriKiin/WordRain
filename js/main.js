@@ -1,13 +1,31 @@
 // import {createWord} from './classes.js'
 
-let r = document.getElementById('result');
-
 let speech;
 const canvas = document.querySelector("canvas"); 
 const ctx = canvas.getContext("2d");
 
+let colors = [
+    "#CCFF66FF",
+    "#5D2E8CFF",
+    "#2EC4B6FF",
+    "#DA4167FF",
+    "#34344AFF"
+];
+let fonts = [
+    "Comic Sans MS"
+];
+
 let words = []
-window.onload = update;
+window.onload = init;
+
+function init() {
+
+    canvas.width = screen.width;
+    canvas.height = screen.height;
+
+    startConverting();
+    update();
+}
 
 function startConverting(){
     if('webkitSpeechRecognition' in window){
@@ -16,7 +34,17 @@ function startConverting(){
         speech.interimResults = true;
         speech.lang = 'en-US';
         speech.start();
-    
+
+
+        speech.onsoundstart = function(){
+            console.log("Starting");
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+        };
+
+        speech.onspeechend = function(){
+            console.log("Speech ended");
+        }
+
         var finalWords = '';
         speech.onresult = function(event){
             var interimTranscript = '';
@@ -27,18 +55,13 @@ function startConverting(){
                     finalWords += transcript;
                 } else {
                     interimTranscript += transcript;
-                    createWord(transcript);
-                    // let word = createWord();
-                    // words.push(word);
+                    prepareWord(transcript);
                 }
             }
-            r.innerHTML = finalWords +  '<span style="color:#999">' + interimTranscript + '</span>';
         };
     
         speech.onerror = function(error){
         };
-    } else {
-        r.innerHTML = "Your Browser is not supported.";
     }
 }
 
@@ -50,20 +73,27 @@ function update(){
     }
 }
 
-function createWord(word, color, font){
+function prepareWord(word) {
+    let wordArray = word.split(" ");
+    for(var i = 0; i< wordArray.length;i++){
+        createWord(wordArray[i]);
+    }
+}
+
+function createWord(word){
     let wordObj = {
         word: word,
-        speed: word.length / 10,
-        x: 50,
+        speed: word.length/3,
+        x: Math.floor(Math.random() * Math.floor(canvas.width)),
         y: 0,
-        color: color,
-        font: font,
+        color: colors[parseInt(Math.random() * Math.floor(colors.length-1))],
+        font: parseInt(Math.random() * (40 - 20) + 20) + "px " + fonts[parseInt(Math.random() * Math.floor(fonts.length-1))],
         move: function(){
             this.y += this.speed;
         },
         draw: function (ctx){
-            ctx.font = "30px Comic Sans MS";
-            ctx.fillStyle = "red";
+            ctx.font = this.font;
+            ctx.fillStyle = this.color;
             ctx.textAlign = "center";
             ctx.fillText(this.word, this.x, this.y);
         }
