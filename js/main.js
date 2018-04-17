@@ -1,9 +1,9 @@
-// import {createWord} from './classes.js'
 
 let speech;
-const canvas = document.querySelector("canvas"); 
+const canvas = document.querySelector("#canvas"); 
 const ctx = canvas.getContext("2d");
-
+const poemCanvas = document.querySelector("#poemCanvas");
+const poemCtx = poemCanvas.getContext("2d");
 let colors = [
     "#CCFF66FF",
     "#5D2E8CFF",
@@ -16,15 +16,28 @@ let fonts = [
 ];
 
 let words = []
+let finalWords = '';
 window.onload = init;
 
 function init() {
+    console.log("init");
+    let div = document.querySelector("#canvas");
 
-    canvas.width = screen.width;
-    canvas.height = screen.height;
+    canvas.width = div.clientWidth;
+    canvas.height = div.clientHeight;
 
     startConverting();
     update();
+}
+
+function startListening(){
+    console.log("start listening");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    poemCtx.clearRect(0, 0, canvas.width, canvas.height);
+
+    words = [];
+    finalWords = '';
+    startConverting();
 }
 
 function startConverting(){
@@ -45,7 +58,6 @@ function startConverting(){
             console.log("Speech ended");
         }
 
-        var finalWords = '';
         speech.onresult = function(event){
             var interimTranscript = '';
             for(var i = event.resultIndex; i < event.results.length; i++){
@@ -62,6 +74,40 @@ function startConverting(){
     
         speech.onerror = function(error){
         };
+    }
+}
+
+function generatePoem(){
+    return;
+
+    poemCtx.font = "14px Comic Sans MS";
+    poemCtx.fillStyle = "black";
+    poemCtx.textAlign = "center";
+
+    let x = 25;
+    let y = 25;
+
+    console.log("Final Words: " + finalWords + " Poem Width: " + poemCanvas.width);
+    let finalWordArr = finalWords.split(' ');
+
+    for(let i = 0; i < finalWordArr.length; i++){
+        console.log("Word: " +  finalWordArr[i] + " X: " + x + " Y: " + y);
+
+        // If we run out of room vertically use ... and end the loop
+        if(y >= poemCanvas.height){
+            poemCtx.fillText("...", x, y);
+            break;
+        }
+
+        poemCtx.fillText(finalWordArr[i], x, y);
+        // console.log ("Width: " + poemCtx.measureText(finalWordArr[i]).width + 10);
+        x += poemCtx.measureText(finalWordArr[i]).width + 10;
+
+        // If we run out of room horizontally start a new line
+        if(x >= poemCanvas.width){
+            y += 50;
+            x = 0;
+        }
     }
 }
 

@@ -1,10 +1,48 @@
-#canvas{
+#canvas, #poemCanvas{
     position: absolute;
-    width:100%;
+    margin-left: 25%;
+    margin-top: 10%;
+    width:50%;
+    height:50%;
     padding:0;
-    margin:0;
+    border: 5px solid black;
 } 
 * {
     margin:0;
     padding:0;
+}
+#startBtn{
+    position:absolute;
+    margin-left: 30%;
+    margin-top: 40%;
+    width: 15%;
+    font-family: 'Inconsolata',monospace;
+    font-size: 18pt;
+    padding:10px;
+    border: 1px solid #2EC4B6FF;
+    transition: all .25s ease-in-out;
+    text-align: center;
+}
+#startBtn:hover{
+    background-color: #2EC4B6FF;
+    color:white;
+    cursor: pointer;
+}
+
+#poemBtn{
+    position:absolute;
+    margin-left: 55%;
+    margin-top: 40%;
+    width: 15%;
+    font-family: 'Inconsolata',monospace;
+    font-size: 18pt;
+    padding:10px;
+    border: 1px solid #DA4167FF;
+    transition: all .25s ease-in-out;
+    text-align: center;
+}
+#poemBtn:hover{
+    background-color: #DA4167FF;
+    color:white;
+    cursor: pointer;
 }
