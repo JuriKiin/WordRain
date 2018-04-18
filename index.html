@@ -3,16 +3,24 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-
   <title>Word Rain</title>
   <link rel="stylesheet" href="css/main.css">
+  <!-- Link google fonts-->
+  <link href="https://fonts.googleapis.com/css?family=Black+Han+Sans" rel="stylesheet">
+
 </head>
 
 <body>
+  <header>
+    Word Rain
+  </header>
+  <!-- <div>
+    <p class="tagline">Human -> Computer communication has always been messy.</p>
+  </div> -->
   <div><canvas id="canvas"></canvas></div>
   <div><canvas id="poemCanvas"></canvas></div>
-  <p id="startBtn" onclick="startListening()">Start Listening</p>
-  <p id="poemBtn" onclick="generatePoem()">Generate Poem</p>
+  <p id="startBtn" onclick="startListening()">Communicate</p>
+  <p id="poemBtn" onclick="generatePoem()">Generate</p>
   <script src="js/main.js"></script>
 </body>
 </html>
