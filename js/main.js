@@ -17,7 +17,6 @@ let fonts = [
 
 let words = []
 let finalWords = '';
-window.onload = init;
 
 function init() {
     console.log("init");
@@ -114,8 +113,11 @@ function generatePoem(){
 function update(){
     requestAnimationFrame(update);
     for(let i = 0; i < words.length; i++){
-        words[i].move();
-        words[i].draw(ctx);
+        // Don't update words that are off screen
+        if(!word[i].outOfBounds()){
+            words[i].move();
+            words[i].draw(ctx);    
+        }
     }
 }
 
@@ -142,6 +144,11 @@ function createWord(word){
             ctx.fillStyle = this.color;
             ctx.textAlign = "center";
             ctx.fillText(this.word, this.x, this.y);
+        },
+        outOfBounds: function(){
+            if(this.y >= canvas.height)
+                return true;
+            return false;
         }
     }
     words.push(wordObj);
