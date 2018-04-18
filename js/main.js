@@ -25,7 +25,7 @@ function init() {
     canvas.width = div.clientWidth;
     canvas.height = div.clientHeight;
 
-    startConverting();
+    //startConverting();
     update();
 }
 
