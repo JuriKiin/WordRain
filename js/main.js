@@ -2,8 +2,6 @@
 let speech;
 const canvas = document.querySelector("#canvas"); 
 const ctx = canvas.getContext("2d");
-const poemCanvas = document.querySelector("#poemCanvas");
-const poemCtx = poemCanvas.getContext("2d");
 let colors = [
     "#CCFF66FF",
     "#5D2E8CFF",
@@ -12,11 +10,12 @@ let colors = [
     "#34344AFF"
 ];
 let fonts = [
-    "Comic Sans MS"
+    'Black Han Sans'
 ];
 
 let words = []
 let finalWords = '';
+window.onload = init;
 
 function init() {
     console.log("init");
@@ -32,8 +31,6 @@ function init() {
 function startListening(){
     console.log("start listening");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    poemCtx.clearRect(0, 0, canvas.width, canvas.height);
-
     words = [];
     finalWords = '';
     startConverting();
@@ -77,47 +74,33 @@ function startConverting(){
 }
 
 function generatePoem(){
-    return;
 
-    poemCtx.font = "14px Comic Sans MS";
-    poemCtx.fillStyle = "black";
-    poemCtx.textAlign = "center";
+    ctx.font = "25px 'Black Han Sans'";
+    ctx.fillStyle = "black";
+    ctx.textAlign = "left";
 
     let x = 25;
-    let y = 25;
-
-    console.log("Final Words: " + finalWords + " Poem Width: " + poemCanvas.width);
+    let y = 50;
     let finalWordArr = finalWords.split(' ');
 
     for(let i = 0; i < finalWordArr.length; i++){
-        console.log("Word: " +  finalWordArr[i] + " X: " + x + " Y: " + y);
-
-        // If we run out of room vertically use ... and end the loop
-        if(y >= poemCanvas.height){
-            poemCtx.fillText("...", x, y);
-            break;
-        }
-
-        poemCtx.fillText(finalWordArr[i], x, y);
-        // console.log ("Width: " + poemCtx.measureText(finalWordArr[i]).width + 10);
-        x += poemCtx.measureText(finalWordArr[i]).width + 10;
-
-        // If we run out of room horizontally start a new line
-        if(x >= poemCanvas.width){
+        if(x + ctx.measureText(finalWordArr[i]).width > canvas.width){
             y += 50;
             x = 0;
+        } else if(y >= canvas.height){
+            ctx.fillText("...", x, y); // If we run out of room vertically use ... and end the loop
+        } else {
+            ctx.fillText(finalWordArr[i], x, y);    //Just print out the next word.
         }
+        x += ctx.measureText(finalWordArr[i]).width + 20;
     }
 }
 
 function update(){
     requestAnimationFrame(update);
     for(let i = 0; i < words.length; i++){
-        // Don't update words that are off screen
-        if(!word[i].outOfBounds()){
-            words[i].move();
-            words[i].draw(ctx);    
-        }
+        words[i].move();
+        words[i].draw(ctx);
     }
 }
 
@@ -144,11 +127,6 @@ function createWord(word){
             ctx.fillStyle = this.color;
             ctx.textAlign = "center";
             ctx.fillText(this.word, this.x, this.y);
-        },
-        outOfBounds: function(){
-            if(this.y >= canvas.height)
-                return true;
-            return false;
         }
     }
     words.push(wordObj);
